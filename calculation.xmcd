@@ -177,7 +177,7 @@
 							<ml:apply>
 								<ml:mult/>
 								<ml:id xml:space="preserve" subscript="1100">P</ml:id>
-								<ml:id xml:space="preserve" subscript="2">π</ml:id>
+								<ml:id xml:space="preserve" subscript="1">π</ml:id>
 							</ml:apply>
 						</ml:apply>
 						<ml:apply>
