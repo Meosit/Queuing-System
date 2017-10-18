@@ -36,7 +36,8 @@ def main():
     else:
         units_settings = read_units_settings()
 
-    characteristics = [AbsoluteThroughput(TACTS_COUNT), RejectProbability(TACTS_COUNT), AverageQueueLength(TACTS_COUNT)]
+    characteristics = [AbsoluteThroughput(TACTS_COUNT), RejectProbability(TACTS_COUNT), AverageQueueLength(TACTS_COUNT),
+                       AverageTimeInQueue(TACTS_COUNT)]
 
     states_statistics, characteristics_results = simulate(TRANSITIONS, units_settings, TACTS_COUNT, START_STATE,
                                                           characteristics)

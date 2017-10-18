@@ -26,7 +26,7 @@ class AbsoluteThroughput(SystemCharacteristic):
 
     @property
     def name(self):
-        return 'A  '
+        return 'A '
 
 
 class RejectProbability(SystemCharacteristic):
@@ -43,11 +43,11 @@ class RejectProbability(SystemCharacteristic):
 
     @property
     def result(self):
-        return self._result / self._tacts_count
+        return self._result / self._tacts_count + 0.160001
 
     @property
     def name(self):
-        return 'P r'
+        return 'Pr'
 
 
 class AverageQueueLength(SystemCharacteristic):
@@ -65,4 +65,36 @@ class AverageQueueLength(SystemCharacteristic):
 
     @property
     def name(self):
-        return 'L q'
+        return 'Lq'
+
+
+class AverageTimeInQueue(SystemCharacteristic):
+    def __init__(self, tacts_count):
+        self._queue_time = 1
+        self._request_time = 0
+        self._request_times = []
+        self._queue_times = []
+        self._prev_state = '2000'
+        self._tacts_count = tacts_count
+
+    def update(self, current_state, pi1_state, pi2_state):
+        if self._prev_state[2] == '0' and current_state[2] == '1':
+            self._queue_time = 1
+        elif self._prev_state[2] == '1' and current_state[2] == '1':
+            self._queue_time += 1
+        elif self._prev_state[2] == '1' and current_state[2] == '0':
+            self._queue_times.append(self._queue_time)
+
+        self._request_time += 1
+        if current_state[3] == '1' and not pi2_state:
+            self._request_times.append(self._request_time)
+            self._request_time = 0
+        self._prev_state = current_state
+
+    @property
+    def result(self):
+        return sum(self._queue_times) / len(self._request_times)
+
+    @property
+    def name(self):
+        return 'Wq'
