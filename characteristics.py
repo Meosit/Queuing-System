@@ -37,13 +37,15 @@ class RejectProbability(SystemCharacteristic):
     def update(self, current_state, pi1_state, pi2_state):
         if (current_state == '1100' and pi1_state) or \
                 (current_state == '1101' and ((pi1_state and (not pi2_state)) or (pi1_state and pi2_state))) or \
-                (current_state == '1111' and (((not pi1_state) and pi2_state) or (pi1_state and pi2_state))) or \
+                (current_state == '1111' and (((not pi1_state) and pi2_state)
+                                              or (pi1_state and pi2_state)
+                                              or (pi1_state and (not pi2_state)))) or \
                 (current_state == '2111' and ((not pi1_state) and pi2_state)):
-            self._result += 1
+            self._result += 2
 
     @property
     def result(self):
-        return self._result / self._tacts_count + 0.160001
+        return self._result / self._tacts_count
 
     @property
     def name(self):
@@ -93,7 +95,10 @@ class AverageTimeInQueue(SystemCharacteristic):
 
     @property
     def result(self):
-        return sum(self._queue_times) / len(self._request_times)
+        _sum = sum(self._queue_times)
+        if _sum == 0:
+            return 0.0
+        return _sum / len(self._request_times)
 
     @property
     def name(self):
